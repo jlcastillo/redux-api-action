@@ -21,7 +21,7 @@ Arguments to the api action wil be sent in the body of the HTTP request.
 import { apiAuth } from 'actions'
 
 const SubmitComponent = ({ apiAuth }) =>
-    <button onClick={() => apiAuth({user: 'foo', password: 'oof'})}>
+    <button onClick={() => apiAuth({body: {user: 'foo', password: 'oof'}})}>
         Submit
     </button>
 
@@ -68,7 +68,7 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { apiMiddleware } from 'redux-api-middleware';
 import reducers from './reducers';
 
-const reducer = combineReducers(reducers);
+const reducer = combineReducers(...reducers, api: (state, action) => state);
 const createStoreWithMiddleware = applyMiddleware(apiMiddleware)(createStore);
 
 export default function configureStore(initialState) {
@@ -79,18 +79,52 @@ export default function configureStore(initialState) {
 #### app.js
 
 ```js
-const store = configureStore({...initialState, {api: {baseUrl: 'https://your.api.server.com'}}});
+const store = configureStore({api: {baseUrl: 'https://your.api.server.com'}});
 ```
 
 ## Authentication
 
 If the redux store contains a token at *state.auth.token*, all HTTP requests will be sent with the header 'Authorization' = 'Bearer '+ *state.auth.token*.
 
+## Query Strings, Interpolated Params and Body of the request
+
+To POST to an endpoint using /api/auth?jwt=true
+
+```js
+// declare the API
+export const apiAuth = createApiAction('POST', '/api/auth')
+...
+// dispatch it (assumming you wrapped it in mapDispatchToProps)
+apiAuth({query: {jwt: true}, body: {user: 'foo', password: 'oof'}})
+```
+
+## Interpolated Params
+
+To POST to an endpoint using /api/:id/auth
+
+```js
+// declare the API
+export const apiAuth = createApiAction('POST', '/api/:id/auth')
+...
+// dispatch it (assumming you wrapped it in mapDispatchToProps)
+apiAuth({params: {id: '1234'}, body: {user: 'foo', password: 'oof'}})
+```
+
+## Interpolated Params
+
+To POST to an endpoint using /api/:id/auth
+
+```js
+// declare the API
+export const apiAuth = createApiAction('POST', '/api/:id/auth')
+...
+// dispatch it (assumming you wrapped it in mapDispatchToProps)
+apiAuth({params: {id: '1234'}})
+```
+
 ## Future Work
 
-* Support query strings (i.e. '/api/users?id=1234')
-* Support parametrized endpoints (i.e. '/api/users/:id)
-
+* Support callbacks for HTTP success and failure.
 
 ## Authors
 

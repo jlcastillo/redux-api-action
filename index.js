@@ -63,8 +63,23 @@ export const createApiAction = (method, endpoint) => {
         failure: actionName + '_FAILURE'
     }
 
-    let actionCreator = (params) => async (dispatch, getState) => {
+    let actionCreator = (options) => async (dispatch, getState) => {
         let apiBaseUrl = getState().api.baseUrl;
+        let endpoint = `${apiBaseUrl}${endpoint}`;
+        
+        // replace interpolated params
+        if(options.params)
+            for (var param in options.params)
+                if (object.hasOwnProperty(param))
+                    endpoint = endpoint.replace(new RegExp(':' + param, 'g'), options.params[param]);
+
+        // add query string
+        if(options.query) {
+            endpoint += '?';
+            for (var q in options.query)
+                if (object.hasOwnProperty(q))
+                    endpoint += q + '=' + options.query[q];
+        }
 
         const headers = {
             'Accept': 'application/json',
@@ -75,9 +90,9 @@ export const createApiAction = (method, endpoint) => {
         let rsaa = {
             [RSAA]: {
                 headers,
-                endpoint: `${apiBaseUrl}${endpoint}`,
+                endpoint,
                 method,
-                body: JSON.stringify(params),
+                body: options.body ? JSON.stringify(options.body) : '',
                 types: [ types.request, types.success, types.failure ]
             }
         }
