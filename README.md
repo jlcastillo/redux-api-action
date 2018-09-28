@@ -119,7 +119,7 @@ Usually you will connect to the redux store to get data retrieved from the API, 
 export const apiAuth = createApiAction('POST', '/api/:id/auth')
 ...
 // dispatch it (assumming you wrapped it in mapDispatchToProps)
-apiAuth({body: {user: 'foo', password: 'oof'}}, onSuccess: (resp) => console.log(resp), onError: () => console.error(resp))
+apiAuth({body: {user: 'foo', password: 'oof'}}, onSuccess: (resp) => console.log(resp), onError: (resp) => console.error(resp))
 ```
 
 ## Authors
