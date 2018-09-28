@@ -79,7 +79,7 @@ export default function configureStore(initialState) {
 #### app.js
 
 ```js
-const store = configureStore(initialState);
+const store = configureStore({...initialState, {api: {baseUrl: 'https://your.api.server.com'}}});
 ```
 
 ## Authentication

@@ -53,6 +53,7 @@
 import { RSAA } from 'redux-api-middleware';
 import { apiUrl } from '../config';
 
+let baseUrl = "";
 
 // Generic description for an API call
 export const createApiAction = (method, endpoint) => {
@@ -64,6 +65,8 @@ export const createApiAction = (method, endpoint) => {
     }
 
     let actionCreator = (params) => async (dispatch, getState) => {
+        let apiBaseUrl = getState().api.baseUrl;
+
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -73,7 +76,7 @@ export const createApiAction = (method, endpoint) => {
         let rsaa = {
             [RSAA]: {
                 headers,
-                endpoint: `${apiUrl}${endpoint}`,
+                endpoint: `${apiBaseUrl}${endpoint}`,
                 method,
                 body: JSON.stringify(params),
                 types: [ types.request, types.success, types.failure ]
