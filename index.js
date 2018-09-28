@@ -55,7 +55,7 @@ import { apiUrl } from '../config';
 
 
 // Generic description for an API call
-export const api = (method, endpoint) => {
+export const createApiAction = (method, endpoint) => {
     let actionName = `[${method}]${endpoint}`;
     let types = {
         request: actionName + '_REQUEST', 
