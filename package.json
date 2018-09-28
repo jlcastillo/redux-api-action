@@ -1,0 +1,9 @@
+{
+  "author": "Jose Luis Castillo",
+  "name": "redux-api-action",
+  "description": "Send HTTP requests to an API server, automatically dispatching actions with the result.",
+  "version": "0.0.1",
+  "main": "./index.js",
+  "dependencies": {
+  }
+}
