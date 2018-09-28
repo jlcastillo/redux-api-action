@@ -51,7 +51,6 @@
 */
 
 import { RSAA } from 'redux-api-middleware';
-import { apiUrl } from '../config';
 
 let baseUrl = "";
 
