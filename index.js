@@ -97,6 +97,14 @@ export const createApiAction = (method, endpoint) => {
             }
         }
         let resp = await dispatch(rsaa);
+
+        // call callbacks if present
+        if(!resp.error && options.onSuccess)
+            options.onSuccess(resp);
+        if(resp.error && options.onError) {
+            options.onSuccess(resp);
+        }
+
         if(resp.payload && resp.payload.status === 401) {
             dispatch({type: "INVALID_TOKEN"});
         }

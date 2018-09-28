@@ -86,7 +86,7 @@ const store = configureStore({api: {baseUrl: 'https://your.api.server.com'}});
 
 If the redux store contains a token at *state.auth.token*, all HTTP requests will be sent with the header 'Authorization' = 'Bearer '+ *state.auth.token*.
 
-## Query Strings, Interpolated Params and Body of the request
+## Query Strings
 
 To POST to an endpoint using /api/auth?jwt=true
 
@@ -110,21 +110,17 @@ export const apiAuth = createApiAction('POST', '/api/:id/auth')
 apiAuth({params: {id: '1234'}, body: {user: 'foo', password: 'oof'}})
 ```
 
-## Interpolated Params
+## Callbacks
 
-To POST to an endpoint using /api/:id/auth
+Usually you will connect to the redux store to get data retrieved from the API, but there may be situations where you need to run some tasks as a result of an API call and you don't want to mess with redux. You can provide *onSuccess* and/or *onError* callbacks as options: 
 
 ```js
 // declare the API
 export const apiAuth = createApiAction('POST', '/api/:id/auth')
 ...
 // dispatch it (assumming you wrapped it in mapDispatchToProps)
-apiAuth({params: {id: '1234'}})
+apiAuth({body: {user: 'foo', password: 'oof'}}, onSuccess: (resp) => console.log(resp), onError: () => console.error(resp))
 ```
-
-## Future Work
-
-* Support callbacks for HTTP success and failure.
 
 ## Authors
 
