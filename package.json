@@ -4,7 +4,7 @@
   "description": "Send HTTP requests to an API server, automatically dispatching actions with the result.",
   "version": "0.0.6",
   "main": "./index.js",
-  "peerDependencies": {
+  "dependencies": {
     "redux-api-middleware": "^2.3.0"
   }
 }
