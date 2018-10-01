@@ -68,7 +68,7 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { apiMiddleware } from 'redux-api-middleware';
 import reducers from './reducers';
 
-const reducer = combineReducers(...reducers, api: (state, action) => state);
+const reducer = combineReducers({...reducers, api: (state, action) => state});
 const createStoreWithMiddleware = applyMiddleware(apiMiddleware)(createStore);
 
 export default function configureStore(initialState) {
