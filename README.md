@@ -12,7 +12,7 @@ npm install redux-api-action --save
 
 ```js
 import { createApiAction } from 'redux-api-action'
-export const apiAuth = createApiAction('POST', '/api/auth')
+export const apiAuth = createApiAction('https://your.api.server.com', 'POST', '/api/auth')
 ```
 
 #### component.js
@@ -54,10 +54,10 @@ export default (state = [], { type, payload, ...action }) => {
  
 ## Prerequisites
 
-redux-api-action relies on  [redux-api-middleware](https://github.com/agraboso/redux-api-middleware):
+redux-api-action relies on  [redux-api-middleware](https://github.com/agraboso/redux-api-middleware) and [redux-thunk](https://github.com/reduxjs/redux-thunk):
 
 ```js
-npm install redux-api-middleware --save
+npm install redux-api-middleware redux-thunk --save
 
 ```
 
@@ -77,12 +77,6 @@ export default function configureStore(initialState) {
 }
 ```
 
-#### app.js
-
-```js
-const store = configureStore({api: {baseUrl: 'https://your.api.server.com'}});
-```
-
 ## Authentication
 
 If the redux store contains a token at *state.auth.token*, all HTTP requests will be sent with the header 'Authorization' = 'Bearer '+ *state.auth.token*.
@@ -93,7 +87,7 @@ To POST to an endpoint using /api/auth?jwt=true
 
 ```js
 // declare the API
-export const apiAuth = createApiAction('POST', '/api/auth')
+export const apiAuth = createApiAction('https://your.api.server.com', 'POST', '/api/auth')
 ...
 // dispatch it (assumming you wrapped it in mapDispatchToProps)
 apiAuth({query: {jwt: true}, body: {user: 'foo', password: 'oof'}})
@@ -105,7 +99,7 @@ To POST to an endpoint using /api/:id/auth
 
 ```js
 // declare the API
-export const apiAuth = createApiAction('POST', '/api/:id/auth')
+export const apiAuth = createApiAction('https://your.api.server.com', 'POST', '/api/:id/auth')
 ...
 // dispatch it (assumming you wrapped it in mapDispatchToProps)
 apiAuth({params: {id: '1234'}, body: {user: 'foo', password: 'oof'}})
@@ -117,7 +111,7 @@ Usually you will connect to the redux store to get data retrieved from the API, 
 
 ```js
 // declare the API
-export const apiAuth = createApiAction('POST', '/api/:id/auth')
+export const apiAuth = createApiAction('https://your.api.server.com', 'POST', '/api/:id/auth')
 ...
 // dispatch it (assumming you wrapped it in mapDispatchToProps)
 apiAuth({body: {user: 'foo', password: 'oof'}}, onSuccess: (resp) => console.log(resp), onError: (resp) => console.error(resp))

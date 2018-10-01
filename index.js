@@ -3,7 +3,7 @@ const RSAA = require('redux-api-middleware').RSAA;
 let baseUrl = "";
 
 // Generic description for an API call
-exports.createApiAction = (method, endpoint) => {
+exports.createApiAction = (apiBaseUrl, method, endpoint) => {
     let actionName = `[${method}]${endpoint}`;
     let types = {
         request: actionName + '_REQUEST', 
@@ -12,7 +12,6 @@ exports.createApiAction = (method, endpoint) => {
     }
 
     let actionCreator = (options) => async (dispatch, getState) => {
-        let apiBaseUrl = getState().api.baseUrl;
         let _url = `${apiBaseUrl}${endpoint}`;
         
         // replace interpolated params
