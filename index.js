@@ -13,20 +13,20 @@ exports.createApiAction = (method, endpoint) => {
 
     let actionCreator = (options) => async (dispatch, getState) => {
         let apiBaseUrl = getState().api.baseUrl;
-        let endpoint = `${apiBaseUrl}${endpoint}`;
+        let _url = `${apiBaseUrl}${endpoint}`;
         
         // replace interpolated params
         if(options.params)
             for (var param in options.params)
                 if (object.hasOwnProperty(param))
-                    endpoint = endpoint.replace(new RegExp(':' + param, 'g'), options.params[param]);
+                    _url = _url.replace(new RegExp(':' + param, 'g'), options.params[param]);
 
         // add query string
         if(options.query) {
-            endpoint += '?';
+            _url += '?';
             for (var q in options.query)
                 if (object.hasOwnProperty(q))
-                    endpoint += q + '=' + options.query[q];
+                    _url += q + '=' + options.query[q];
         }
 
         const headers = {
@@ -38,7 +38,7 @@ exports.createApiAction = (method, endpoint) => {
         let rsaa = {
             [RSAA]: {
                 headers,
-                endpoint,
+                endpoint: _url,
                 method,
                 body: options.body ? JSON.stringify(options.body) : '',
                 types: [ types.request, types.success, types.failure ]
