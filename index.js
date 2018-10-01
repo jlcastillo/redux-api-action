@@ -1,9 +1,9 @@
-import { RSAA } from 'redux-api-middleware';
+const RSAA = require('redux-api-middleware').RSAA;
 
 let baseUrl = "";
 
 // Generic description for an API call
-export const createApiAction = (method, endpoint) => {
+exports.createApiAction = (method, endpoint) => {
     let actionName = `[${method}]${endpoint}`;
     let types = {
         request: actionName + '_REQUEST', 
