@@ -5,6 +5,7 @@
   "version": "0.0.11",
   "main": "./index.js",
   "dependencies": {
-    "redux-api-middleware": "^2.3.0"
+    "redux-api-middleware": "^2.3.0",
+    "redux-thunk": "^2.3.0"
   }
 }
