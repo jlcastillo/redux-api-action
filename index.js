@@ -32,7 +32,7 @@ exports.createApiAction = (method, endpoint) => {
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': getState().auth.token ? "Bearer " + getState().auth.token : ''
+            'Authorization': (getState().auth && getState().auth.token) ? "Bearer " + getState().auth.token : ''
         }
 
         let rsaa = {
