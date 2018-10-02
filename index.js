@@ -49,7 +49,7 @@ exports.createApiAction = (apiBaseUrl, method, endpoint) => {
         if(!resp.error && options.onSuccess)
             options.onSuccess(resp);
         if(resp.error && options.onError) {
-            options.onSuccess(resp);
+            options.onError(resp);
         }
 
         if(resp.payload && resp.payload.status === 401) {
