@@ -17,7 +17,7 @@ exports.createApiAction = (apiBaseUrl, method, endpoint) => {
         // replace interpolated params
         if(options.params)
             for (var param in options.params)
-                if (object.hasOwnProperty(param))
+                if (options.hasOwnProperty(param))
                     _url = _url.replace(new RegExp(':' + param, 'g'), options.params[param]);
 
         // add query string
