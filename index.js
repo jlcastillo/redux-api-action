@@ -11,7 +11,7 @@ exports.createApiAction = (apiBaseUrl, method, endpoint) => {
         failure: actionName + '_FAILURE'
     }
 
-    let actionCreator = (options) => async (dispatch, getState) => {
+    let actionCreator = (options = {}) => async (dispatch, getState) => {
         let _url = `${apiBaseUrl}${endpoint}`;
         
         // replace interpolated params
