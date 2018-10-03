@@ -24,7 +24,7 @@ exports.createApiAction = (apiBaseUrl, method, endpoint) => {
         if(options.query) {
             _url += '?';
             for (var q in options.query)
-                if (object.hasOwnProperty(q))
+                if (options.query.hasOwnProperty(q))
                     _url += q + '=' + options.query[q];
         }
 
