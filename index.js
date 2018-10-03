@@ -22,10 +22,7 @@ exports.createApiAction = (apiBaseUrl, method, endpoint) => {
 
         // add query string
         if(options.query) {
-            _url += '?';
-            for (var q in options.query)
-                if (object.hasOwnProperty(q))
-                    _url += q + '=' + options.query[q];
+           _url = _url + "?" + Object.keys(options.query).map(key => key + "=" + options.query[key]).join("&");
         }
 
         const headers = {
