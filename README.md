@@ -20,22 +20,30 @@ Arguments to the api action wil be sent in the body of the HTTP request.
 ```js
 import { apiAuth } from 'actions'
 
+const options = {body: {user: 'foo', password: 'oof'};
+
 const SubmitComponent = ({ apiAuth }) =>
-    <button onClick={() => apiAuth({body: {user: 'foo', password: 'oof'}})}>
+    <button onClick={() => apiAuth(options)}>
         Submit
     </button>
 
 export default connect(null, { apiAuth })(SubmitComponent)
 ```
 
+where options may contain:
+* **body**: the object that will be embedded in the body of the HTTP request
+* **params**: to replace strings in the URL. I.e. in a url like ```https://your.server.com/user/:id```, you may replace ```:id``` using ```options = { params: {id: "1234"}}```.
+* **query**: to add query arguments to the end of the URL. I.e. to add ```?name=jose&surname=castillo``` to the end of an URL, you would use ```options = {query: {name: "jose", surname="castillo"} } ```
+
+
 #### reducers.js
 ```js
 import { apiAuth } from 'actions'
 
-export default (state = [], { type, payload, ...action }) => {
+export default (state = [], { type, payload, meta, error }) => {
   switch(type) {
     case apiAuth.types.request: {
-        if(action.error)
+        if(error)
             // API call timed out
         else
             // API call just sent, response not received yet
@@ -51,6 +59,15 @@ export default (state = [], { type, payload, ...action }) => {
   }
 }
 ```
+
+where:
+* type = **"[POST]/api/auth"**
+* meta = **{body: {user: 'foo', password: 'oof'}}**  (the options passed to apiAuth)
+* error = **true** if there was an error, **undefined** otherwise.
+* if success:
+    * payload = **{ token: 12332432543 }**
+* if error:
+    * payload.status = **404** (an error code)
  
 ## Prerequisites
 
@@ -79,7 +96,7 @@ export default function configureStore(initialState) {
 
 ## Authentication
 
-If the redux store contains a token at *state.auth.token*, all HTTP requests will be sent with the header 'Authorization' = 'Bearer '+ *state.auth.token*.
+If the redux store contains a token at **auth.token**, all HTTP requests will be sent with the header 'Authorization' = 'Bearer '+ **auth.token**.
 
 ## Query Strings
 

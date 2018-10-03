@@ -40,7 +40,11 @@ exports.createApiAction = (apiBaseUrl, method, endpoint) => {
                 endpoint: _url,
                 method,
                 body: options.body ? JSON.stringify(options.body) : '',
-                types: [ types.request, types.success, types.failure ]
+                types: [
+                    { type: types.request, meta: options },
+                    { type: types.success, meta: options },
+                    { type: types.failure, meta: options }
+                ]
             }
         }
         let resp = await dispatch(rsaa);

@@ -2,7 +2,7 @@
   "author": "Jose Luis Castillo",
   "name": "redux-api-action",
   "description": "Send HTTP requests to an API server, automatically dispatching actions with the result.",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "main": "./index.js",
   "dependencies": {
     "redux-api-middleware": "^2.3.0",
