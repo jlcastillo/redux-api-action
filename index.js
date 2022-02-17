@@ -2,6 +2,19 @@ const RSAA = require('redux-api-middleware').RSAA;
 
 let baseUrl = "";
 
+const getFormData = (options) => {
+    const data = new FormData()
+    for ( var key in options.body ) {
+        data.append(key, options.body[key])
+    }
+
+    for ( var key in options.files ) {
+       data.append(key, options.files[key])
+    }
+
+    return data
+}
+
 // Generic description for an API call
 exports.createApiAction = (apiBaseUrl, method, endpoint) => {
     let actionName = `[${method}]${endpoint}`;
@@ -27,16 +40,17 @@ exports.createApiAction = (apiBaseUrl, method, endpoint) => {
 
         const headers = {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
             'Authorization': (getState().auth && getState().auth.token) ? "Bearer " + getState().auth.token : ''
         }
+
+        const body = options.files ? getFormData(options) : JSON.stringify(options.body)
 
         let rsaa = {
             [RSAA]: {
                 headers,
                 endpoint: _url,
                 method,
-                body: options.body ? JSON.stringify(options.body) : '',
+                body: body,
                 types: [
                     { type: types.request, meta: options },
                     { type: types.success, meta: options },
