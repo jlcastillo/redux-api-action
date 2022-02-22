@@ -1,14 +1,12 @@
 const RSAA = require('redux-api-middleware').RSAA;
 
-let baseUrl = "";
-
 const getFormData = (options) => {
     const data = new FormData()
-    for ( var key in options.body ) {
+    for ( let key in options.body ) {
         data.append(key, options.body[key])
     }
 
-    for ( var key in options.files ) {
+    for ( let key in options.files ) {
        data.append(key, options.files[key])
     }
 
@@ -17,8 +15,8 @@ const getFormData = (options) => {
 
 // Generic description for an API call
 exports.createApiAction = (apiBaseUrl, method, endpoint) => {
-    let actionName = `[${method}]${endpoint}`;
-    let types = {
+    const actionName = `[${method}]${endpoint}`;
+    const types = {
         request: actionName + '_REQUEST', 
         success: actionName + '_SUCCESS', 
         failure: actionName + '_FAILURE'
@@ -29,7 +27,7 @@ exports.createApiAction = (apiBaseUrl, method, endpoint) => {
         
         // replace interpolated params
         if(options.params)
-            for (var param in options.params)
+            for (let param in options.params)
                 if (options.params.hasOwnProperty(param))
                     _url = _url.replace(new RegExp(':' + param, 'g'), options.params[param]);
 
@@ -43,9 +41,9 @@ exports.createApiAction = (apiBaseUrl, method, endpoint) => {
             'Authorization': (getState().auth && getState().auth.token) ? "Bearer " + getState().auth.token : ''
         }
 
-        const body = options.files ? getFormData(options) : JSON.stringify(options.body)
+        const body = options.files ? getFormData(options) : JSON.stringify(options.body || '')
 
-        let rsaa = {
+        const rsaa = {
             [RSAA]: {
                 headers,
                 endpoint: _url,
@@ -58,7 +56,7 @@ exports.createApiAction = (apiBaseUrl, method, endpoint) => {
                 ]
             }
         }
-        let resp = await dispatch(rsaa);
+        const resp = await dispatch(rsaa);
 
         // call callbacks if present
         if(!resp.error && options.onSuccess)
