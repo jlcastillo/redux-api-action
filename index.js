@@ -1,11 +1,22 @@
 const RSAA = require('redux-api-middleware').RSAA;
 
-let baseUrl = "";
+const getFormData = (options) => {
+    const data = new FormData()
+    for ( let key in options.body ) {
+        data.append(key, options.body[key])
+    }
+
+    for ( let key in options.files ) {
+       data.append(key, options.files[key])
+    }
+
+    return data
+}
 
 // Generic description for an API call
 exports.createApiAction = (apiBaseUrl, method, endpoint) => {
-    let actionName = `[${method}]${endpoint}`;
-    let types = {
+    const actionName = `[${method}]${endpoint}`;
+    const types = {
         request: actionName + '_REQUEST', 
         success: actionName + '_SUCCESS', 
         failure: actionName + '_FAILURE'
@@ -16,7 +27,7 @@ exports.createApiAction = (apiBaseUrl, method, endpoint) => {
         
         // replace interpolated params
         if(options.params)
-            for (var param in options.params)
+            for (let param in options.params)
                 if (options.params.hasOwnProperty(param))
                     _url = _url.replace(new RegExp(':' + param, 'g'), options.params[param]);
 
@@ -27,16 +38,17 @@ exports.createApiAction = (apiBaseUrl, method, endpoint) => {
 
         const headers = {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
             'Authorization': (getState().auth && getState().auth.token) ? "Bearer " + getState().auth.token : ''
         }
 
-        let rsaa = {
+        const body = options.files ? getFormData(options) : (JSON.stringify(options.body) || '')
+
+        const rsaa = {
             [RSAA]: {
                 headers,
                 endpoint: _url,
                 method,
-                body: options.body ? JSON.stringify(options.body) : '',
+                body: body,
                 types: [
                     { type: types.request, meta: options },
                     { type: types.success, meta: options },
@@ -44,7 +56,7 @@ exports.createApiAction = (apiBaseUrl, method, endpoint) => {
                 ]
             }
         }
-        let resp = await dispatch(rsaa);
+        const resp = await dispatch(rsaa);
 
         // call callbacks if present
         if(!resp.error && options.onSuccess)
