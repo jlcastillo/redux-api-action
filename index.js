@@ -41,6 +41,8 @@ exports.createApiAction = (apiBaseUrl, method, endpoint) => {
             'Authorization': (getState().auth && getState().auth.token) ? "Bearer " + getState().auth.token : ''
         }
 
+        if (!options.files) headers['Content-Type'] = 'application/json'
+
         const body = options.files ? getFormData(options) : (JSON.stringify(options.body) || '')
 
         const rsaa = {
